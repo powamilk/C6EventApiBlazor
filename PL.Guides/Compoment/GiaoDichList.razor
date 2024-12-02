@@ -1,0 +1,75 @@
+﻿@page "/giaodichs"
+@using DAL.Entities
+@using PL.Guides.Service
+@inject IGiaoDichService GiaoDichService
+@inject NavigationManager NavigationManager
+
+
+<div class="d-flex">
+    <button class="btn btn-primary" @onclick="Add">Thêm</button>
+</div>
+@if(giaoDichs == null)
+{
+    <p>đang load</p>
+}
+else if(!giaoDichs.Any())
+{
+    <p>Không có giao dịch nào</p>
+}
+else{
+    <h3>GiaoDichList</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NguoiThucHien</th>
+                <th>LoaiGiaoDich</th>
+                <th>DiaChiVi</th>
+                <th>SoLuong</th>
+                <th>NgayGiaoDich</th>
+                <th>PhiGiaoDich</th>
+                <th>TrangThai</th>
+                <th>Hành ĐỘng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var giaoDich in giaoDichs)
+            {
+                <tr>
+                    <td>@giaoDich.NguoiThucHien</td>
+                    <td>@giaoDich.LoaiGiaoDich</td>
+                    <td>@giaoDich.DiaChiVi</td>
+                    <td>@giaoDich.SoLuong</td>
+                    <td>@giaoDich.NgayGiaoDich</td>
+                    <td>@giaoDich.PhiGiaoDich</td>
+                    <td>@giaoDich.TrangThai</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="Edit">Sửa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+
+@code {
+    [Parameter]
+    public Guid id { get; set; }
+
+    private IEnumerable<GiaoDichTaiChinh> giaoDichs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        giaoDichs = await GiaoDichService.GetAllAsync();
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("/addgiaodich");
+    }
+
+    private void Edit()
+    {
+        NavigationManager.NavigateTo($"/giaodichUpdate/{id}");
+    }
+}

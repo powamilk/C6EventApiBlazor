@@ -1,0 +1,85 @@
+﻿@page "/giaodichUpdate/{id:guid}"
+@using DAL.Entities
+@using PL.Guides.Service
+@inject IGiaoDichService GiaoDichService
+@inject NavigationManager NavigationManager
+
+@if (giaoDichSua == null)
+{
+    <p>đang load</p>
+}
+else
+{
+    <EditForm Model="giaoDichSua" OnValidSubmit="HandleSubmit">
+        <div class="mb-3">
+            <label for="NguoiThucHien" class="form-label">NguoiThucHien</label>
+            <InputText id="NguoiThucHien" class="form-control" @bind-Value="giaoDichSua.NguoiThucHien" />
+        </div>
+        <div class="mb-3">
+            <label for="DiaChiVi" class="form-label">DiaChiVi</label>
+            <InputText id="DiaChiVi" class="form-control" @bind-Value="giaoDichSua.DiaChiVi" />
+        </div>
+        <div class="mb-3">
+            <label for="SoLuong" class="form-label">SoLuong</label>
+            <InputNumber id="SoLuong" class="form-control" @bind-Value="giaoDichSua.SoLuong" />
+        </div>
+        <div class="mb-3">
+            <label for="NgayGiaoDich" class="form-label">Ngày giao dịch</label>
+            <InputDate id="NgayGiaoDich" class="form-control" @bind-Value="giaoDichSua.NgayGiaoDich" />
+        </div>
+        <div class="mb-3">
+            <label for="PhiGiaoDich" class="form-label">PhiGiaoDich</label>
+            <InputNumber id="PhiGiaoDich" class="form-control" @bind-Value="giaoDichSua.PhiGiaoDich" />
+        </div>
+        <div class="mb-3">
+            <label for="LoaiGiaoDich" class="form-label">LoaiGiaoDich</label>
+            <InputSelect id="LoaiGiaoDich" class="form-select" @bind-Value="giaoDichSua.LoaiGiaoDich">
+                <Option value="Gửi">Gửi</Option>
+                <Option value="Nhận">Nhận</Option>
+                <Option value="Hoán đổi">Hoán đổi</Option>
+            </InputSelect>
+        </div>
+        <div class="mb-3">
+            <label for="TrangThai" class="form-label">TrangThai</label>
+            <InputSelect id="TrangThai" class="form-select" @bind-Value="giaoDichSua.TrangThai">
+                <Option value="Đang xử lý">Đang xử lý</Option>
+                <Option value="Thành công">Thành công</Option>
+                <Option value="Thất bại">Thất bại</Option>
+            </InputSelect>
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm</button>
+        <button type="button" class="btn btn-primary" @onclick="GoBack">Hủy</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public Guid id { get; set; }
+    private GiaoDichTaiChinh giaoDichSua;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var giaoDich = await GiaoDichService.GetByIdAsync(id);
+        giaoDichSua = new GiaoDichTaiChinh
+        {
+            NguoiThucHien = giaoDich.NguoiThucHien,
+            LoaiGiaoDich = giaoDich.LoaiGiaoDich,
+            DiaChiVi = giaoDich.DiaChiVi,
+            SoLuong = giaoDich.SoLuong,
+            NgayGiaoDich = giaoDich.NgayGiaoDich,
+            PhiGiaoDich = giaoDich.PhiGiaoDich,
+            TrangThai = giaoDich.TrangThai,
+        };
+    }
+
+    private async Task HandleSubmit()
+    {
+        await GiaoDichService.UpdateAsync(id, giaoDichSua);
+        NavigationManager.NavigateTo("/giaodichs");
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/giaodichs");
+    }
+}
