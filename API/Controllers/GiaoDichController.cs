@@ -13,10 +13,9 @@ namespace API.Controllers
 
         public GiaoDichController(IGiaoDichService service)
         {
-            _service = service;
+            _service = service; 
         }
-
-        [HttpGet] 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<GiaoDichTaiChinh>>> GetAll()
         {
             var giaoDich = await _service.GetAllAsync();
@@ -27,46 +26,34 @@ namespace API.Controllers
         public async Task<ActionResult<GiaoDichTaiChinh>> GetById(Guid id)
         {
             var giaoDich = await _service.GetByIdAsync(id);
-            if (giaoDich == null)
-            {
-                return NotFound();
-            }
+            if (giaoDich == null) { return NotFound(); }
             return Ok(giaoDich);
         }
 
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] GiaoDichTaiChinh vm)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-             await _service.AddAsync(vm);
+            await _service.AddAsync(vm);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] GiaoDichTaiChinh vm)
+        public async Task<ActionResult> Update(Guid id, GiaoDichTaiChinh vm)
         {
-            var exxisting = await _service.GetByIdAsync(id);
-            if(exxisting == null)
-            {
-                return NotFound();
-            }
-            await _service.UpdateAsync(vm); 
-            return NoContent();
+            var existing = await _service.GetByIdAsync(id);
+            if (existing == null) { return NotFound(); }
+            await _service.UpdateAsync(existing);
+            return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existing = await _service.GetByIdAsync(id);
-            if(existing == null)
-            {
-                return NotFound();  
-            }
+            if (existing == null) { return NotFound(); }
             await _service.DeleteAsync(id);
             return NoContent();
         }
+
     }
 }

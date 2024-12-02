@@ -1,0 +1,55 @@
+﻿@page "/giaodichAdd"
+@using DAL.Entities
+@using PL.Guides.Serivce
+@inject IGiaoDichService GiaoDichService
+@inject NavigationManager NavigationManager
+
+
+<h3>AddList</h3>
+<EditForm Model="newGiaoDich" OnValidSubmit="HandelAsync">
+    <div class="mb-3">
+        <label for="NguoiThucHien" class="form-label" >NguoiThucHien</label>
+        <InputText id="NguoiThucHien" class="form-control" @bind-Value="newGiaoDich.NguoiThucHien"/>
+    </div
+    <div class="mb-3">
+        <label for="LoaiGiaoDich" class="form-label" >LoaiGiaoDich</label>
+        <InputText id="LoaiGiaoDich" class="form-control" @bind-Value="newGiaoDich.LoaiGiaoDich"/>
+    </div>
+    <div class="mb-3">
+        <label for="DiaChiVi" class="form-label" >DiaChiVi</label>
+        <InputText id="DiaChiVi" class="form-control" @bind-Value="newGiaoDich.DiaChiVi"/>
+    </div>
+    <div class="mb-3">
+        <label for="SoLuong" class="form-label" >SoLuong</label>
+        <InputNumber id="SoLuong" class="form-control" @bind-Value="newGiaoDich.SoLuong"/>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label" ></label>
+        <InputDate id="NgayGiaoDich" class="form-control" @bind-Value="newGiaoDich.NgayGiaoDich"/>
+    </div>
+    <div class="mb-3">
+        <label for="PhiGiaoDich" class="form-label" >PhiGiaoDich</label>
+        <InputNumber id="PhiGiaoDich" class="form-control" @bind-Value="newGiaoDich.PhiGiaoDich"/>
+    </div>
+    <div class="mb-3">
+        <label for="TrangThai" class="form-label" >TrangThai</label>
+        <InputText id="TrangThai" class="form-control" @bind-Value="newGiaoDich.TrangThai"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm</button>
+    <button type="button" class="btn btn-primary" @onclick="Back">Hủy</button>"
+</EditForm>
+
+@code {
+    private GiaoDichTaiChinh newGiaoDich = new();
+
+    private async Task HandelAsync()
+    {
+        await GiaoDichService.AddAsync(newGiaoDich);
+        NavigationManager.NavigateTo("/giaodichs");
+    }
+
+    private async Task Back()
+    {
+        NavigationManager.NavigateTo("/giaodichs");
+    }
+}

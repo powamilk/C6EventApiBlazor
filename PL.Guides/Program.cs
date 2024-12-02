@@ -1,7 +1,7 @@
+using PL.Guides.Serivce;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using PL.Guides.Data;
-using PL.Guides.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

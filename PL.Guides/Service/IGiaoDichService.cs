@@ -1,7 +1,6 @@
-﻿
-using DAL.Entities;
+﻿using DAL.Entities;
 
-namespace PL.Guides.Service
+namespace PL.Guides.Serivce
 {
     public interface IGiaoDichService
     {
